@@ -1,126 +1,30 @@
 #include <stdio.h>
-#include <string.h>
 
-#define MAX 100
-
-typedef struct {
-    char name[50];
-    int score;
-} Player;
-
-Player heap[MAX];
+int heap[10];
 int size = 0;
 
-// Swap players
-void swap(Player *a, Player *b) {
-    Player temp = *a;
-    *a = *b;
-    *b = temp;
-}
+void insert(int value)
+{
+    int i = size;
+    heap[size++] = value;
 
-// Heapify Up
-void heapifyUp(int index) {
-    while (index > 0 && heap[(index - 1) / 2].score < heap[index].score) {
-        swap(&heap[index], &heap[(index - 1) / 2]);
-        index = (index - 1) / 2;
+    while (i > 0 && heap[(i - 1) / 2] < heap[i])
+    {
+        int temp = heap[i];
+        heap[i] = heap[(i - 1) / 2];
+        heap[(i - 1) / 2] = temp;
+
+        i = (i - 1) / 2;
     }
 }
 
-// Heapify Down
-void heapifyDown(int index) {
-    int largest = index;
+int main()
+{
+    insert(50);
+    insert(30);
+    insert(70);
 
-    while (1) {
-        int left = 2 * index + 1;
-        int right = 2 * index + 2;
-
-        if (left < size && heap[left].score > heap[largest].score)
-            largest = left;
-
-        if (right < size && heap[right].score > heap[largest].score)
-            largest = right;
-
-        if (largest != index) {
-            swap(&heap[index], &heap[largest]);
-            index = largest;
-        } else {
-            break;
-        }
-    }
-}
-
-// Add Player
-void addPlayer(char name[], int score) {
-    strcpy(heap[size].name, name);
-    heap[size].score = score;
-    size++;
-    heapifyUp(size - 1);
-}
-
-// Get Top Player
-void showTopPlayer() {
-    if (size == 0) {
-        printf("No players available\n");
-        return;
-    }
-    printf("Top Player: %s (Score: %d)\n", heap[0].name, heap[0].score);
-}
-
-// Remove Top Player
-void removeTopPlayer() {
-    if (size == 0) return;
-
-    heap[0] = heap[size - 1];
-    size--;
-    heapifyDown(0);
-}
-
-// Display Heap
-void display() {
-    printf("\nLeaderboard:\n");
-    for (int i = 0; i < size; i++) {
-        printf("%s - %d\n", heap[i].name, heap[i].score);
-    }
-}
-
-int main() {
-    int choice, score;
-    char name[50];
-
-    while (1) {
-        printf("\n--- Gaming Leaderboard ---\n");
-        printf("1. Add Player\n");
-        printf("2. Show Top Player\n");
-        printf("3. Remove Top Player\n");
-        printf("4. Display Leaderboard\n");
-        printf("5. Exit\n");
-        printf("Enter choice: ");
-        scanf("%d", &choice);
-
-        if (choice == 1) {
-            printf("Enter name: ");
-            scanf("%s", name);
-            printf("Enter score: ");
-            scanf("%d", &score);
-            addPlayer(name, score);
-        }
-        else if (choice == 2) {
-            showTopPlayer();
-        }
-        else if (choice == 3) {
-            removeTopPlayer();
-            printf("Top player removed\n");
-        }
-        else if (choice == 4) {
-            display();
-        }
-        else if (choice == 5) {
-            break;
-        }
-        else {
-            printf("Invalid choice\n");
-        }
-    }
+    printf("Top Player Score: %d\n", heap[0]);
 
     return 0;
 }
