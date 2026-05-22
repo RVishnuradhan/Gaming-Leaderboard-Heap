@@ -1,10 +1,4 @@
-Add: A 100
-Add: B 200
-Add: C 150
-
-Top Player: B
-
-Leaderboard:
-B 200
-A 100
-C 150
+insert(50);
+insert(30);
+insert(70);
+Top Player Score: 70
